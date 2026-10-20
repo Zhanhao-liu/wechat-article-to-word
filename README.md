@@ -1,5 +1,12 @@
 # wechat-article-to-word（W2D）
 
+[![Stars](https://img.shields.io/github/stars/Zhanhao-liu/wechat-article-to-word?style=flat-square)](https://github.com/Zhanhao-liu/wechat-article-to-word/stargazers)
+[![License](https://img.shields.io/github/license/Zhanhao-liu/wechat-article-to-word?style=flat-square)](LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/Zhanhao-liu/wechat-article-to-word?style=flat-square)](https://github.com/Zhanhao-liu/wechat-article-to-word/commits/main)
+[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](#环境要求)
+[![Platform](https://img.shields.io/badge/platform-Windows-0078D4?style=flat-square&logo=windows&logoColor=white)](#环境要求)
+[![Output](https://img.shields.io/badge/output-docx%20%7C%20html%20%7C%20json-2B579A?style=flat-square&logo=microsoftword&logoColor=white)](#产物结构)
+
 > **把公众号文章抓下来，存成一个「打开就是原文样子」的 Word。**
 > 当前状态：**M1 已跑通** —— `w2d export <url>` 能出 docx，图片全部内嵌、标题层级可导航。
 > 已用两篇真实文章验证：6/6 与 13/13 张图片全部内嵌，OOXML 结构合法（见 [06-M1记录](./docs/06-M1记录.md)）
@@ -164,3 +171,18 @@ wechat-article-to-word/
 ├─ samples/           真实文章 HTML 快照（回归测试用，仅本地）
 └─ output/            产物（开发后生成）
 ```
+
+---
+
+## 环境要求
+
+- Windows 10/11
+- Python 3.10+（推荐用 [uv](https://docs.astral.sh/uv/) 拉起：`uv python install 3.12`）
+- 可选：本机装了 Chrome/Edge → 背景图卡片能整块截图；没装则自动降级为「背景图 + 文字」
+
+## 授权与免责
+
+本项目以 [MIT](./LICENSE) 协议开源。
+
+仅用于**个人存档与研究**：不绕过登录、验证码、付费墙或删文限制，不提供批量再分发能力。
+抓取内容的版权归原作者所有，请自行确保使用方式合法。
