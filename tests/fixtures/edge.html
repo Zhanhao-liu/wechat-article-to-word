@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>M2 边界结构测试</title></head>
+<body>
+<div id="js_article">
+  <h1 id="activity-name">M2 边界结构测试文章</h1>
+  <div id="js_name">测试公众号</div>
+  <em id="publish_time">2026-10-19</em>
+  <div id="js_content" style="visibility: hidden; opacity: 0;">
+
+    <!-- 1. 背景图卡片：带背景图 + 文字（应转图或 bg 图 + 文字） -->
+    <section style="background-image: url('https://mmbiz.qpic.cn/mmbiz_png/TESTCARD/0?wx_fmt=png');background-size:100% 100%;padding:20px;">
+      <p style="color:#ffffff;font-size:18px;">这是一张背景图卡片上的标题文字</p>
+    </section>
+
+    <!-- 2. 只有背景图、没有文字的卡片 -->
+    <section style="background-image: url('https://mmbiz.qpic.cn/mmbiz_png/TESTCARD2/0?wx_fmt=png');height:60px;"></section>
+
+    <!-- 3. background-image:none 的普通节点（不得被误判为卡片） -->
+    <section style="background-image: none;"><p>普通段落，background-image 是 none，不能被当成卡片。</p></section>
+
+    <!-- 4. 视频 -->
+    <mpvideo data-mpvid="wxv_test" data-title="演示视频：效果对比" data-cover="https://mmbiz.qpic.cn/mmbiz_png/COVER/0"></mpvideo>
+
+    <!-- 5. 音频 -->
+    <mpvoice data-name="作者朗读：摘要" data-voice_encode_fileid="test_voice"></mpvoice>
+
+    <!-- 6. 小程序卡片 -->
+    <mp-common-miniprogram data-title="示例小程序" data-nickname="示例小程序" data-appid="wx123" data-pagepath="pages/index"></mp-common-miniprogram>
+
+    <!-- 7. 公众号名片（已有支持，回归用） -->
+    <mp-common-profile data-nickname="测试公众号" data-alias="TestAcc" data-signature="这是一个签名"></mp-common-profile>
+
+    <!-- 8. 内联 SVG 图标（应删除） -->
+    <p>这段文字后面的图标应该被删掉：<svg width="16" height="16"><circle cx="8" cy="8" r="7"/></svg>结束。</p>
+
+    <!-- 9. data:image/svg+xml 的 img（应删除） -->
+    <p><img src="data:image/svg+xml;base64,PHN2Zy8+" alt="图标">装饰图标不应出现</p>
+
+    <!-- 10. 带 th 的表格（明确表头） -->
+    <table>
+      <thead><tr><th>方法</th><th>mAP</th><th>FPS</th></tr></thead>
+      <tbody>
+        <tr><td>Baseline</td><td>84.5</td><td>213.8</td></tr>
+        <tr><td>Ours</td><td>89.4</td><td>207.2</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 11. 无 th 但有表头语义的表格（推断） -->
+    <table>
+      <tr><td>数据集</td><td>样本数</td></tr>
+      <tr><td>SA</td><td>5120</td></tr>
+    </table>
+
+    <!-- 12. figure + figcaption -->
+    <figure>
+      <span leaf><img data-src="https://mmbiz.qpic.cn/mmbiz_png/FIG1/0?wx_fmt=png" alt=""></span>
+      <figcaption>图1：带 figcaption 的图片</figcaption>
+    </figure>
+
+    <!-- 13. span 包裹的图片 + 原文自带图注 -->
+    <p>中心<span leaf><img data-src="https://mmbiz.qpic.cn/mmbiz_png/FIG2/0?wx_fmt=png" alt="图2 重复图注测试"></span>图2 重复图注测试</p>
+
+    <!-- 14. ol 里的图片 -->
+    <ol>
+      <li>第一步说明文字</li>
+      <li>第二步，下面有图<span leaf><img data-src="https://mmbiz.qpic.cn/mmbiz_png/FIG3/0?wx_fmt=png"></span></li>
+      <li>第三步说明文字</li>
+    </ol>
+
+    <!-- 15. 空段落与连续空白（应被清理） -->
+    <p>&nbsp;</p>
+    <section><section><section><p>深层嵌套里的文字必须保留。</p></section></section></section>
+    <p> </p>
+
+  </div>
+</div>
+</body></html>

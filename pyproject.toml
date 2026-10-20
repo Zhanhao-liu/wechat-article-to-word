@@ -1,0 +1,27 @@
+[project]
+name = "w2d"
+version = "0.1.0"
+description = "把公众号文章抓下来，存成保留文字与图片排版的 Word"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.28",
+    "lxml>=5.0",
+    "cssselect>=1.2",
+    "python-docx>=1.1",
+    "pillow>=10.0",
+    "typer>=0.12",
+    "rich>=13.0",
+]
+
+[project.scripts]
+w2d = "w2d.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

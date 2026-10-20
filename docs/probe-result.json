@@ -1,0 +1,35 @@
+{
+  "ok": false,
+  "checks": {
+    "env": {
+      "python": "3.12.14",
+      "httpx": "0.28.1",
+      "python_docx": "1.2.0",
+      "pillow": "13.0.0",
+      "root": "D:\\lzh_own\\工具\\wechat-article-to-word",
+      "root_has_nonascii": true,
+      "ok": true,
+      "ms": 888
+    },
+    "egress_direct": {
+      "status": 200,
+      "bytes": 61247,
+      "server": null,
+      "ok": true,
+      "ms": 344
+    },
+    "word_com_html_to_docx": {
+      "ok": false,
+      "error": "com_error: (-2147352567, '发生意外。', (0, 'Microsoft Word', 'Word 未能引发事件。', 'wdmain11.chm', 25482, -2146822286), None)",
+      "trace": "Traceback (most recent call last):\n  File \"D:\\lzh_own\\工具\\wechat-article-to-word\\scripts\\probe.py\", line 47, in wrapper\n    info = fn(*args, **kwargs) or {}\n           ^^^^^^^^^^^^^^^^^^^\n  File \"D:\\lzh_own\\工具\\wechat-article-to-word\\scripts\\probe.py\", line 233, in probe_word_com\n    doc = app.Documents.Open(\n          ^^^^^^^^^^^^^^^^^^^\n  File \"<COMObject <unknown>>\", line 5, in Open\npywintypes.com_error: (-2147352567, '发生意外。', (0, 'Microsoft Word', 'Word 未能引发事件。', 'wdmain11.chm', 25482, -2146822286), None)\n",
+      "ms": 3227
+    },
+    "docx_clean_python_docx": {
+      "docx_bytes": 39004,
+      "path": "tmp\\probe\\probe_clean.docx",
+      "ok": true,
+      "ms": 40
+    }
+  },
+  "verdict": "M0 未通过，见失败项"
+}

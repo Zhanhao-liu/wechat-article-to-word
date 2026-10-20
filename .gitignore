@@ -1,0 +1,26 @@
+# ---- 依赖与运行环境 ----
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# ---- 产物与中间文件（会很大，绝不入库）----
+output/
+tmp/
+*.docx
+*.pdf
+
+# ---- 真实文章样本（每篇 3.5–4 MB，按 samples/README.md 里的 URL 可重新抓取）----
+samples/*.html
+
+# ---- 本机配置（含个人保存路径）----
+.w2d-config.json
+
+# ---- 系统 / 编辑器 ----
+Thumbs.db
+desktop.ini
+.DS_Store
+.idea/
+.vscode/
