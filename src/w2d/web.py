@@ -300,6 +300,7 @@ PAGE = r"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>公众号文章 → Word 工作台</title>
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%233A4A74'/><text x='32' y='44' font-family='Segoe UI,Arial' font-size='36' font-weight='700' fill='%23ffffff' text-anchor='middle'>W</text><rect x='17' y='48' width='30' height='4' rx='2' fill='%2393C5FD'/></svg>">
 <style>
 *{box-sizing:border-box}
 body{margin:0;padding:28px 18px 60px;background:#f5f6f8;color:#222;

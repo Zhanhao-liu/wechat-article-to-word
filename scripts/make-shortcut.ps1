@@ -24,6 +24,16 @@ if ($sig.Status -ne 'Valid') {
     Write-Host "pythonw 签名有效：$($sig.SignerCertificate.Subject -replace '^CN=([^,]+).*','$1')" -ForegroundColor Green
 }
 
+# 图标缺失时自动生成（scripts\make-icon.py）
+if (-not (Test-Path $ico)) {
+    $py = Join-Path $root '.venv\Scripts\python.exe'
+    $gen = Join-Path $root 'scripts\make-icon.py'
+    if ((Test-Path $py) -and (Test-Path $gen)) {
+        Write-Host "图标不存在，正在生成..." -ForegroundColor Yellow
+        & $py $gen | Out-Null
+    }
+}
+
 $shell = New-Object -ComObject WScript.Shell
 
 function New-AppShortcut([string]$path) {
