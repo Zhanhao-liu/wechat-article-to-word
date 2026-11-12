@@ -5,7 +5,12 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $pyw  = Join-Path $root '.venv\Scripts\pythonw.exe'
-$ico  = Join-Path $root 'assets\w2d.ico'
+$icoSrc = Join-Path $root 'assets\w2d.ico'
+
+# 图标必须放在「纯 ASCII 路径」下：实测 Shell 读取含中文路径（如 D:\...\工具\...）
+# 的 .ico 会失败，快捷方式就显示成空白文档图标。
+$ico = $icoSrc
+$icoAsciiDir = Join-Path $env:LOCALAPPDATA 'w2d'
 
 if (-not (Test-Path $pyw)) {
     Write-Host "找不到 $pyw" -ForegroundColor Red
@@ -32,6 +37,17 @@ if (-not (Test-Path $ico)) {
         Write-Host "图标不存在，正在生成..." -ForegroundColor Yellow
         & $py $gen | Out-Null
     }
+}
+
+# 部署图标到 ASCII 路径（失败则退回项目内路径）
+try {
+    New-Item -ItemType Directory -Path $icoAsciiDir -Force -ErrorAction Stop | Out-Null
+    $deployed = Join-Path $icoAsciiDir 'app-icon.ico'
+    Copy-Item $icoSrc $deployed -Force -ErrorAction Stop
+    $ico = $deployed
+    Write-Host "图标已部署到：$ico" -ForegroundColor Green
+} catch {
+    Write-Host "图标复制失败，沿用项目内路径（中文路径可能导致图标空白）" -ForegroundColor Yellow
 }
 
 $shell = New-Object -ComObject WScript.Shell
