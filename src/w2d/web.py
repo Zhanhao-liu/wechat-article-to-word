@@ -26,6 +26,7 @@ JOBS: dict[str, dict] = {}
 LOCK = threading.Lock()
 OUT_ROOT = Path("output")
 SETTINGS = Path(".w2d-config.json")
+SHUTDOWN: threading.Event | None = None  # 桌面模式下由 app.py 注入，用于「退出程序」
 
 
 def load_settings() -> dict:
@@ -242,6 +243,13 @@ class Handler(BaseHTTPRequestHandler):
     # ---- POST
     def do_POST(self) -> None:  # noqa: N802
         route = self.path.split("?")[0]
+        if route == "/api/quit":
+            if SHUTDOWN is not None:
+                SHUTDOWN.set()
+                self._json({"ok": True, "message": "程序正在退出"})
+            else:
+                self._json({"error": "命令行模式下请按 Ctrl+C 停止"}, 400)
+            return
         if route == "/api/settings":
             try:
                 length = int(self.headers.get("Content-Length") or 0)
@@ -442,15 +450,26 @@ loadSettings();
 """
 
 
-def serve(port: int = 8865, out: Path | None = None) -> None:
+def init_out(out: Path | str | None = None) -> Path:
+    """确定并创建输出目录（命令行指定 > 上次选择 > 默认 output）。"""
     global OUT_ROOT
     if out is not None:
         OUT_ROOT = Path(out).resolve()
     else:
         OUT_ROOT = Path(load_settings().get("out") or "output").resolve()
     OUT_ROOT.mkdir(parents=True, exist_ok=True)
-    srv = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"工作台已启动：http://127.0.0.1:{port}")
+    return OUT_ROOT
+
+
+def make_server(port: int = 8865, out: Path | str | None = None) -> ThreadingHTTPServer:
+    """只建服务、不阻塞，供桌面窗口与自检复用。"""
+    init_out(out)
+    return ThreadingHTTPServer(("127.0.0.1", port), Handler)
+
+
+def serve(port: int = 8865, out: Path | None = None) -> None:
+    srv = make_server(port, out)
+    print(f"工作台已启动：http://127.0.0.1:{srv.server_address[1]}")
     print(f"输出目录：{OUT_ROOT}")
     print("按 Ctrl+C 停止")
     try:
