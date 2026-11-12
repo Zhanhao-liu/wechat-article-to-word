@@ -28,3 +28,6 @@ desktop.ini
 # ---- 桌面启动相关（图标要提交，快捷方式不入库）----
 logs/
 *.lnk
+
+# ---- 每次启动的浏览器窗口 profile ----
+tmp/appwin-profiles/

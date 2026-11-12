@@ -180,8 +180,29 @@ wechat-article-to-word/
 ## 环境要求
 
 - Windows 10/11
-- Python 3.10+（推荐用 [uv](https://docs.astral.sh/uv/) 拉起：`uv python install 3.12`）
-- 可选：本机装了 Chrome/Edge → 背景图卡片能整块截图；没装则自动降级为「背景图 + 文字」
+- **官方签名的 Python 3.10+**（重要：见下方说明）
+- 可选：本机装了 Chrome/Edge → 用来承载程序窗口、背景图卡片截图；没装则卡片降级为「背景图 + 文字」
+
+> ⚠️ **关于 Python 版本来源（踩过的坑）**
+> `uv python install` 下载的是重打包版 CPython，**`pythonw.exe` 没有数字签名**，
+> 从快捷方式/资源管理器直接启动会被 Windows Defender SmartScreen 拦住
+> （弹「已阻止无法识别的应用启动 / 已保护你的电脑」）。
+> 解决：用 python.org 官方签名版建虚拟环境，快捷方式指向它就不会再弹。
+
+```powershell
+# 1) 安装官方签名的 Python（签名者：Python Software Foundation）
+winget install --id Python.Python.3.12 -e --scope user
+
+# 2) 用这个 Python 建环境（不要用 uv python install 的那个）
+uv venv .venv --python "$env:LOCALAPPDATA\Programs\Python\Python312\python.exe"
+uv pip install --python .venv\Scripts\python.exe -e .
+
+# 3) 生成快捷方式（脚本会顺便校验签名）
+powershell -ExecutionPolicy Bypass -File scripts\make-shortcut.ps1
+
+# 校验签名是否为 Valid / Python Software Foundation
+powershell -Command "Get-AuthenticodeSignature .\.venv\Scripts\pythonw.exe | Select-Object Status,@{n='Signer';e={`$_.SignerCertificate.Subject}}"
+```
 
 ## 授权与免责
 

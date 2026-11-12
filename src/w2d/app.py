@@ -100,7 +100,18 @@ def _open_in_app_window(url: str, quit_event: threading.Event) -> None:
         quit_event.wait()
         return
 
-    profile = Path(__file__).resolve().parents[2] / "tmp" / "appwin-profile"
+    # 每次用独立 profile：否则 Chrome 会把新进程当成「已有实例」直接交接后退出，
+    # 我们就会误判成「窗口已关闭」而立刻关掉服务（实测踩过）。
+    base = Path(__file__).resolve().parents[2] / "tmp" / "appwin-profiles"
+    base.mkdir(parents=True, exist_ok=True)
+    for old in sorted(base.iterdir(), key=lambda p: p.stat().st_mtime, reverse=True)[2:]:
+        try:
+            import shutil
+
+            shutil.rmtree(old, ignore_errors=True)
+        except OSError:
+            pass
+    profile = base / f"p{os.getpid()}-{int(time.time())}"
     profile.mkdir(parents=True, exist_ok=True)
     proc = subprocess.Popen(  # noqa: S603
         [
@@ -183,7 +194,7 @@ def main(argv: list[str] | None = None) -> int:
             webview.start()
             logging.info("原生窗口已关闭")
         except Exception as exc:  # noqa: BLE001 - 没有 .NET/WebView2 就退化
-            logging.warning("原生窗口不可用（%s），改用浏览器应用模式窗口", exc)
+            logging.info("使用浏览器应用模式窗口（原生窗口不可用：%s）", exc)
             web.SHUTDOWN = quit_event
             _open_in_app_window(url, quit_event)
         return 0
